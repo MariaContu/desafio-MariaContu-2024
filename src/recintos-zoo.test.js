@@ -44,5 +44,25 @@ describe('Recintos do Zoologico', () => {
         expect(resultado.recintosViaveis.length).toBe(2);
     });
 
+test('Recinto com hipopotamo sem savana e rio e após tentamos incluir um macaco. (cobrir regras de hipopotamo e macaco)', () => {
+    const zoo = new RecintosZoo();
+
+    // Adicionamos um hipopótamo ao recinto 4, que não tem savana e rio
+    zoo.recintos[3].animais.push('HIPOPOTAMO');
+
+    // Tentamos adicionar um macaco
+    const resultado = zoo.analisaRecintos('MACACO', 1);
+
+    expect(resultado.erro).toBeFalsy();
+
+    // Recinto 4 NÃO deve aparecer porque não tem os biomas corretos
+    expect(resultado.recintosViaveis).not.toContain('Recinto 4 (espaço livre: 4 total: 8)');
+
+    // Verifica se os outros recintos viáveis aparecem corretamente
+    expect(resultado.recintosViaveis).toContain('Recinto 1 (espaço livre: 6 total: 10)');
+    expect(resultado.recintosViaveis).toContain('Recinto 3 (espaço livre: 3 total: 7)');
+    expect(resultado.recintosViaveis.length).toBe(2); // Deve haver apenas 2 recintos viáveis
+});
+
 });
 
